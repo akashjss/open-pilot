@@ -1,6 +1,6 @@
 from models.gpt4o import GPT4o
 from models.gpt4v import GPT4v
-
+from models.llama_vision_model import Llama32Vision
 
 class ModelFactory:
     @staticmethod
@@ -9,5 +9,7 @@ class ModelFactory:
             return GPT4o(model_name, *args)
         elif model_name == 'gpt-4-vision-preview' or model_name == 'gpt-4-turbo':
             return GPT4v(model_name, *args)
+        elif model_name == "x/llama3.2-vision:latest":
+            return Llama32Vision(model_name, *args)
         else:
             raise ValueError(f'Unsupported model type {model_name}. Create entry in app/models/')
