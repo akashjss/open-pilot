@@ -6,6 +6,7 @@ from utils.screens import Screens
 from typing import Any
 from PIL import Image
 
+
 class Llama32Vision(Model):
     def __init__(self, model_name, base_url, api_key, context):
         super().__init__(model_name, base_url, api_key, context)
@@ -19,17 +20,17 @@ class Llama32Vision(Model):
 
         # Update the request prompt to be more specific and clear
         request_data: str = json.dumps({
-            'objective': original_user_request,
-            'step_number': step_num,
-            'instructions': 'Please provide step-by-step actions in JSON format to achieve the objective described.'
+            'original_user_request': original_user_request,
+            'step_num': step_num,
+            'screenshot': screenshot_path
         })
 
         # Create message with prompt and screenshot
         message = [
-            {'type': 'text', 'text': self.context + request_data},
+            {'role': 'user', 'content': request_data},
             {'type': 'image_path', 'image_path': screenshot_path}
         ]
-
+        print(message)
         return message
 
     def send_message_to_llm(self, message) -> Any:
@@ -39,8 +40,46 @@ class Llama32Vision(Model):
                 model=self.model_name,
                 messages=[
                     {
+                        'role': 'system',
+                        'content': (
+                            "You are assisting with personal, authorized commands on my own machine. "
+                            "User requests will be to control my computer locally for routine tasks (e.g., 'Open Sublime Text' or 'Create an Excel sheet with a meal plan'). "
+                            "You will respond with JSON steps that help me accomplish these commands, mapping to specific function calls that control the mouse and keyboard using pyautogui. "
+                            "This will be used only on my personal device for development and productivity purposes. "
+                            "The JSON should be formatted exactly as specified, without extra text. "
+                            "Only send back a valid JSON response that can be parsed without errors. "
+                            "Here is the expected format:\n\n"
+                            "{\n"
+                            "    \"steps\": [\n"
+                            "        {\n"
+                            "            \"function\": \"...\",\n"
+                            "            \"parameters\": { ... },\n"
+                            "            \"human_readable_justification\": \"...\"\n"
+                            "        },\n"
+                            "        ...\n"
+                            "    ],\n"
+                            "    \"done\": ...\n"
+                            "}\n\n"
+                            "Valid function names and their expected parameters are:\n"
+                            "- \"press\": parameters: { \"keys\": [\"key1\", \"key2\", ...], \"presses\": int, \"interval\": float }\n"
+                            "- \"write\": parameters: { \"text\": \"string\", \"interval\": float }\n"
+                            "- \"hotkey\": parameters: { \"keys\": [\"key1\", \"key2\", ...] }\n"
+                            "- \"moveTo\": parameters: { \"x\": int, \"y\": int, \"duration\": float }\n"
+                            "- \"click\": parameters: { \"x\": int, \"y\": int, \"button\": \"left\" or \"right\", \"clicks\": int, \"interval\": float }\n"
+                            "- \"sleep\": parameters: { \"secs\": float }\n\n"
+                            "Valid key names for 'keys' parameters are:\n"
+                            "- 'shift', 'ctrl', 'alt', 'command', 'tab', 'space', 'enter', 'left', 'right', 'up', 'down', etc.\n"
+                            "Note: Use 'command' instead of 'cmd' for the Command key on macOS.\n"
+                            "When responding, ensure you include all necessary steps to complete the user's request fully.\n"
+                            "For example, to 'open Google', you might need to:\n"
+                            "- Open the browser application.\n"
+                            "- Navigate to 'www.google.com' in the browser.\n"
+                            "Remember, only output the JSON response in this format without any additional text. Do not use 'pyautogui' as a function name. Use the specific function names listed above."
+                        )
+                    },
+                    {
                         'role': 'user',
-                        'content': message[0]['text'],
+                        'content': message[0]['content'],
                         'images': [message[1]['image_path']]
                     }
                 ]
