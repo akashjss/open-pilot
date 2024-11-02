@@ -75,7 +75,7 @@ class LLM:
     def read_context_txt_file(self) -> str:
         # Construct context for the assistant by reading context.txt and adding extra system information
         context = ''
-        path_to_context_file = Path(__file__).resolve().parent.joinpath('resources', 'context.txt')
+        path_to_context_file = Path(__file__).resolve().parent.joinpath('resources', '')
         with open(path_to_context_file, 'r') as file:
             context += file.read()
 
