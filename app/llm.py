@@ -58,6 +58,7 @@ class LLM:
             context = self.read_context_txt_file()
         else:
             context = self.read_ollama_context_txt_file()
+            print(f"Using Ollama context: {context}")
 
         self.model = ModelFactory.create_model(self.model_name, base_url, api_key, context)
 
