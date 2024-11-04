@@ -6,9 +6,10 @@ from utils.screen import Screen
 
 
 class OllamaOpenAI(Model):
-    def __init__(self, model_name='x/llama3.2-vision:latest', base_url='http://localhost:11434/v1/', api_key='ollama', context=''):
+    def __init__(self, model_name='', base_url='http://localhost:11434/v1/', api_key='ollama', context=''):
         # Use the base class constructor to initialize the client and other attributes
         super().__init__(model_name, base_url, api_key, context)
+        print(f"OllamaOpenAI model initialized with model_name: {model_name}")
 
     def get_instructions_for_objective(self, original_user_request: str, step_num: int = 0) -> dict[str, Any]:
         message: list[dict[str, Any]] = self.format_user_request_for_llm(original_user_request, step_num)

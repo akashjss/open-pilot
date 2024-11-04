@@ -10,8 +10,6 @@ class ModelFactory:
             return GPT4o(model_name, *args)
         elif model_name == 'gpt-4-vision-preview' or model_name == 'gpt-4-turbo':
             return GPT4v(model_name, *args)
-        elif model_name == "x/llama3.2-vision:latest":
-            return Ollama(model_name, *args)
         elif model_name == "llava-phi3:latest":
             print(f"Creating OllamaOpenAI model with model_name: {model_name}")
             return OllamaOpenAI(model_name, *args)
