@@ -54,7 +54,10 @@ class LLM:
         model_name, base_url, api_key = self.get_settings_values()
 
         self.model_name = model_name
-        context = self.read_context_txt_file()
+        if self.model_name == 'gpt-4-vision-preview' or self.model_name == 'gpt-4-turbo' or self.model_name == 'gpt-4o':
+            context = self.read_context_txt_file()
+        else:
+            context = self.read_ollama_context_txt_file()
 
         self.model = ModelFactory.create_model(self.model_name, base_url, api_key, context)
 
@@ -75,7 +78,7 @@ class LLM:
     def read_context_txt_file(self) -> str:
         # Construct context for the assistant by reading context.txt and adding extra system information
         context = ''
-        path_to_context_file = Path(__file__).resolve().parent.joinpath('resources', '')
+        path_to_context_file = Path(__file__).resolve().parent.joinpath('resources', 'context.txt')
         with open(path_to_context_file, 'r') as file:
             context += file.read()
 
@@ -88,6 +91,15 @@ class LLM:
 
         if 'custom_llm_instructions' in self.settings_dict:
             context += f'\nCustom user-added info: {self.settings_dict["custom_llm_instructions"]}.'
+
+        return context
+    
+    def read_ollama_context_txt_file(self) -> str:
+        # Construct context for the assistant by reading context.txt and adding extra system information
+        context = ''
+        path_to_context_file = Path(__file__).resolve().parent.joinpath('resources', 'ollama_context.txt')
+        with open(path_to_context_file, 'r') as file:
+            context += file.read()
 
         return context
 

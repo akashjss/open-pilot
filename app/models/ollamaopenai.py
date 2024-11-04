@@ -48,7 +48,7 @@ class OllamaOpenAI(Model):
                     'content': message,
                 }
             ],
-            max_tokens=800,
+            max_tokens=10000,
         )
         return response
 

@@ -14,13 +14,6 @@ class Ollama(Model):
         self.model_name = "x/llama3.2-vision:latest"
         self.screens = Screens()
 
-    def get_instructions_for_objective(self, original_user_request: str, step_num: int = 0) -> dict[str, Any]:
-        # This method generates instructions for a given objective
-        message: list[dict[str, Any]] = self.format_user_request_for_llm(original_user_request, step_num)
-        llm_response = self.send_message_to_llm(message)
-        json_instructions: dict[str, Any] = self.convert_llm_response_to_json_instructions(llm_response)
-        return json_instructions
-
     def format_user_request_for_llm(self, original_user_request, step_num) -> list[dict[str, Any]]:
         # Use screenshot as an image file directly instead of converting to base64
         screenshot_path = self.screens.save_screenshot_to_file()
@@ -124,6 +117,13 @@ class Ollama(Model):
             json_response = {'error': 'JSON parsing failed', 'message': llm_response_data}
 
         return json_response
+
+    def get_instructions_for_objective(self, original_user_request: str, step_num: int = 0) -> dict[str, Any]:
+        # This method generates instructions for a given objective
+        message: list[dict[str, Any]] = self.format_user_request_for_llm(original_user_request, step_num)
+        llm_response = self.send_message_to_llm(message)
+        json_instructions: dict[str, Any] = self.convert_llm_response_to_json_instructions(llm_response)
+        return json_instructions
 
     def cleanup(self):
         # Cleanup resources if necessary, such as deleting temporary files
