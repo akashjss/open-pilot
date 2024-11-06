@@ -16,7 +16,6 @@ class Screen:
     def get_screenshot(self) -> Image.Image:
         # Enable screen recording from settings
         img = pyautogui.screenshot()  # Takes roughly 100ms # img.show()
-        img.show()
         return img
 
     def get_screenshot_in_base64(self) -> str:

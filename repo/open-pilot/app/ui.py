@@ -227,7 +227,7 @@ class UI:
             # PhotoImage object needs to persist as long as the app does, hence it's a class object.
             path_to_icon_png = Path(__file__).resolve().parent.joinpath('resources', 'icon.png')
             path_to_microphone_png = Path(__file__).resolve().parent.joinpath('resources', 'microphone.png')
-            self.logo_img = ImageTk.PhotoImage(Image.open(path_to_icon_png).resize((50, 50)))
+            self.logo_img = ImageTk.PhotoImage(Image.open(path_to_icon_png).resize((100, 50)))
             self.mic_icon = ImageTk.PhotoImage(Image.open(path_to_microphone_png).resize((18, 18)))
 
             # This adds app icon in linux which pyinstaller can't

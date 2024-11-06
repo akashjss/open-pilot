@@ -54,12 +54,8 @@ class LLM:
         model_name, base_url, api_key = self.get_settings_values()
 
         self.model_name = model_name
-
-        if self.model_name.startswith('gpt-4'):
-            context = self.read_context_txt_file()
-        else:
-            context = self.read_ollama_context_txt_file()
-            print(f"Using Ollama context: {context}")
+        context = self.read_ollama_context_txt_file()
+        print(f"Using Ollama context: {context}")
 
         self.model = ModelFactory.create_model(self.model_name, base_url, api_key, context)
 
@@ -103,6 +99,12 @@ class LLM:
         with open(path_to_context_file, 'r') as file:
             context += file.read()
 
+        context += f' Locally installed apps are {",".join(local_info.locally_installed_apps)}.'
+        context += f' OS is {local_info.operating_system}.'
+        context += f' Primary screen size is {Screen().get_size()}.\n'
+
+        if 'default_browser' in self.settings_dict.keys() and self.settings_dict['default_browser']:
+            context += f'\nDefault browser is {self.settings_dict["default_browser"]}.'
         return context
 
     def get_instructions_for_objective(self, original_user_request: str, step_num: int = 0) -> dict[str, Any]:
