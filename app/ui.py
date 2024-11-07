@@ -224,6 +224,18 @@ class UI:
             self.title('Open Interface')
             self.minsize(420, 250)
 
+            # Calculate position for bottom right corner
+            screen_width = self.winfo_screenwidth()
+            screen_height = self.winfo_screenheight()
+            window_width = 420
+            window_height = 250
+            x_position = screen_width - window_width - 10  # 10px margin from the right edge
+            y_position = screen_height - window_height - 50  # 50px margin from the bottom edge
+
+            # Set the geometry of the window
+            self.geometry(f'{window_width}x{window_height}+{x_position}+{y_position}')
+
+
             # PhotoImage object needs to persist as long as the app does, hence it's a class object.
             path_to_icon_png = Path(__file__).resolve().parent.joinpath('resources', 'icon.png')
             path_to_microphone_png = Path(__file__).resolve().parent.joinpath('resources', 'microphone.png')

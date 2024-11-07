@@ -42,11 +42,10 @@ class Ollama(Model):
                     {
                         'role': 'system',
                         'content': (
-                            "You are assisting with personal, authorized commands on my own machine. "
+                            "You are assisting with personal, authorized commands on my own machine macOS. "
                             "User requests will be to control my computer locally for routine tasks (e.g., 'Open Sublime Text' or 'Create an Excel sheet with a meal plan'). "
                             "You will respond with JSON steps that help me accomplish these commands, mapping to specific function calls that control the mouse and keyboard using pyautogui. "
                             "This will be used only on my personal device for development and productivity purposes. "
-                            "The JSON should be formatted exactly as specified, without extra text. "
                             "Only send back a valid JSON response that can be parsed without errors. "
                             "Here is the expected format:\n\n"
                             "{\n"
@@ -74,7 +73,8 @@ class Ollama(Model):
                             "For example, to 'open Google', you might need to:\n"
                             "- Open the browser application.\n"
                             "- Navigate to 'www.google.com' in the browser.\n"
-                            "Remember, only output the JSON response in this format without any additional text. Do not use 'pyautogui' as a function name. Use the specific function names listed above."
+                            "- you can open spotlight like this pyautogui.hotkey('command', 'space')"
+                            "Remember, only output the JSON response in this format without any additional text.Use the specific function names listed above."
                         )
                     },
                     {
