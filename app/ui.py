@@ -260,6 +260,10 @@ class UI:
             self.entry = ttk.Entry(frame, width=30)
             self.entry.grid(column=0, row=2, sticky=(ttk.W, ttk.E))
 
+            # Bind the Enter key to the submit function
+            self.entry.bind("<Return>", lambda event: self.execute_user_request())
+            self.entry.bind("<KP_Enter>", lambda event: self.execute_user_request())
+
             # Submit Button
             button = ttk.Button(frame, text='Submit', bootstyle="success", command=self.execute_user_request)
             button.grid(column=2, row=2)

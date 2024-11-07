@@ -12,6 +12,6 @@ class ModelFactory:
             return GPT4v(model_name, *args)
         elif model_name == "llava-phi3:latest":
             print(f"Creating OllamaOpenAI model with model_name: {model_name}")
-            return OllamaOpenAI(model_name, *args)
+            return Ollama(model_name, *args)
         else:
             raise ValueError(f'Unsupported model type {model_name}. Create entry in app/models/')
